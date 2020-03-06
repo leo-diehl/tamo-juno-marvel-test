@@ -1,68 +1,152 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# __Introduction__
+I would like to thank you beforehand for your time and patience to read this
+big chunk of text, and also to apologize for writing this much.<br>
+Although being very short in time, less than three days total, it was a wonderful experience to exercise and play using this little project!
+I hope you enjoy (:
 
-## Available Scripts
+# __Project Description__
 
-In the project directory, you can run:
+### __How to run__
+```
+npm install
+npm run dev
+```
 
-### `npm start`
+### __General-Purpose__
+Even having a limited scope to act upon, from what I can see it's very unlikely that you
+would have an app that would render just a screen, and would have a single functionality like this.
+Having this in mind, I designed the app architecture to resemble more a real App, by this
+meaning that scalability and reusability were taken in accountability.
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### __Design__
+Ideally, in a rainbow-colored world (<3), it would be needed to study the desired image that we would want to promote to our customers, and then decide visual identity to back-up the App.
+But, as I know my time is short, and the purpose of this test isn't necessarily to test my UI designing skills, I got the colors and general feeling inspiration directly from Marvel's website (https://www.marvel.com/) :D
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### __Pages__
+The app ended up with two pages:
 
-### `npm test`
+## Characters List (/characters):
+The list of Marvel characters.<br>
+[Images](https://imgur.com/a/4YFZegB)<br>
+- The user can search with text and the page has also pagination.
+- The search and pagination are maintained between route navigation.
+- Every time some search is performed, the app store the search parameters inside the store.
+In the next search, if the sent parameters are the same, the app will avoid performing the same
+search and will just return the stored values.
+  > This wouldn't work well in a scope where more volatile data would need to be updated constantly.
+- When the user clicks inside a card, he'll be redirected to the Character page
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## View Character (/characters/:characterId)
+Here the user will have access to the basic characters basic info (name, description, and thumbnail),
+and also Comics, Series, Events, and Stories related to that character.<br>
+[Images](https://imgur.com/a/gFCrNz0)<br>
+- Each section of the page loads independently
+- If you access the same character two times, the App will recognize it by the ```id``` and will avoid fetching all the data once again.
+- When the user clicks inside some of the cards linked to the character, the App will open
+a new tab aimed to some url containing details of this resource. This data is retrieved from Marvel's API.
 
-### `npm run build`
+-----
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# __Folder Structure__
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+## __SRC - front-end__
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### __Disclaimers__
+- I've chosen to build the folder structure to group files by domain/feature standard.
+In my opinion, it isolates better the possible unwanted outcomes when updating code,
+as related files are grouped and the programmer can check them easily.
+Also, it makes much easier to organize integration and also unit testing.
+- I put a package.json file attached to every component with a ```{main:"<filename>"}```
+config inside them, just to be able to import the components directly by the folder's
+path. I find a little annoying to specify the filename two times, every time.
+  > I could've done this naming each main JSX file as ```index.js``` but, this way, I easily get lost among the files while debugging
 
-### `npm run eject`
+### __CSS structure__
+I'm fond of the practice of the component as an autonomous unit inside the application.
+To achieve this, I decided to make use of the package ```styled-components```, as it would
+make it possible to isolate my components completely and I would also be able to make use of __SCSS__
+features inside it.
+- If I had more time, I would like to put all colors and common styles inside the ```~/assets/styles/theme``` to access them dinamically and make it easier to modify the whole app design easier.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### __Testing__
+Unfortunately, as already pointed out tha my time ran short,
+I didn't manage to build the component tests in time. ```:,(```<br>
+Anyways, I'll continue to finish them after delivering this version.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+-----
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### __src/containers__
+In this folder, I decided to put components that would be data-heavy, manipulate a lot of data,
+and wouldn't be focused on presentational and styling roles.
+In the end, they ended up holding my two app "pages".
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+-----
 
-## Learn More
+### __src/components__
+Here I put the "presentational" components. Components that don't manipulate data but hold
+most of the styling of the app.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+-----
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### __src/store__: Redux store structure
+- For the folders, I separated the concerns using the __domain/feature folders standard__.
+- For the files inside the feature folder, I used the __redux "ducks" pattern__ a little modified.
+  > Although knowing that one possible drawback of this practice could be the confusion
+  > generated by giant files (action-types, reducer, actions and middleware together),
+  > I found that the advantage of not having to jump between a lot of files while managing
+  > the store was worth it.
+- Aside from that, each feature folder has it's separated __selectors__ file. I decided to do that
+because of their quantity and also because, in my opinion, they aren't enough semantically close
+to be with the reducer structure itself.
 
-### Code Splitting
+-----
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+### __src/router__
+Here I stored all route specs, inside the ```routes.js``` file, and also de switch component,
+which imported all the specified routes and generated the needed components.
 
-### Analyzing the Bundle Size
+-----
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+### __src/assets__
+General assets of the application, including:
+  - Images
+  - Icons
+  - Styles
+  - Fonts
 
-### Making a Progressive Web App
+-----
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
+### __src/services__
+Here I stored all the Axios calls to be used by our redux middlewares to fetch data from the server
 
-### Advanced Configuration
+-----
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
+## __SERVER - back-end__
+I structured my folders here by function, not by feature like in the front-end.
+I decided to do this because, from what I can see, there's more code-sharing between different
+"features" inside the back-end, and they're more linked in their functions.
 
-### Deployment
+### __Disclaimers__
+- The tokens are stored inside the ```.env.local``` file, in the root directory
+- As there's a limit of 3000 calls by token inside Marvel's API, there's an environment variable named ```USE_MOCKED_VALUES``` that will activate or deactivate the use of a mocked model to get the values
+- As this test being aimed for front-ends, I skipped the stop of building an authentication middleware
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
 
-### `npm run build` fails to minify
+-----
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### __server/routes__
+Here I put all my server routes, one file by each feature and then an ```index``` one,
+in which I grouped all of them to be exported as only one setup function
+
+-----
+
+### __server/controllers__
+The layer to communicate between the front-end and the database, in our case the Marvel's API
+
+-----
+
+### __server/models__
+Although not being exactly models, I decided to separate all our communication with
+the pseudo-database, the Marvel's API, here.
+
+-----
